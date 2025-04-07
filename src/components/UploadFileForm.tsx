@@ -9,7 +9,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { VisuallyHiddenInput } from "./ui/VisuallyHiddenInput";
 
 interface IUploadFileForm {
-    file: FileList;
+    file?: FileList;
     stream_key: string;
 }
 
@@ -24,7 +24,9 @@ const UploadFileForm = () => {
 
     const onSubmit = async (data: IUploadFileForm) => {
         const formData = new FormData();
-        formData.append("file", data.file[0]);
+        if (data.file && data.file[0]) {
+            formData.append("file", data.file[0]);
+        }
         formData.append("stream_key", data.stream_key);
 
         upload(formData);
@@ -49,8 +51,8 @@ const UploadFileForm = () => {
                 <Stack>
                     <Typography>Video:</Typography>
                     <Typography>
-                        {watch("file") && watch("file").length > 0
-                            ? watch("file")[0].name
+                        {(watch("file") ?? []).length > 0
+                            ? watch("file")![0].name
                             : "No file selected"}
                     </Typography>
                 </Stack>
